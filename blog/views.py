@@ -4,8 +4,6 @@ from .models import Post
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
 from django.shortcuts import redirect
-from tkinter import *
-from tkinter import messagebox
 
 # Create your views here.
 def post_list(request):
@@ -55,11 +53,14 @@ def post_publish(request, pk):
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     #POST requests
-    if request.method == "POST":
+    x = request.POST.get('no')
+    print(x)
+    if request.method == "POST" and request.POST.get('yes') == "Yes":
         #confirming delete
-        #post.delete()
-        x = post
+        post.delete()
         return redirect('post_list')
-    else:
+    elif request.method == "POST" and request.POST.get('no') == "No":
         return render(request, 'blog/post_detail.html', {'post': post})
+    else:
+        return render(request, 'blog/post_remove.html', {'post': post})
 
